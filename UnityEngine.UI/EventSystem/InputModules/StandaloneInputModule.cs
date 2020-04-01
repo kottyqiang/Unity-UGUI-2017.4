@@ -206,13 +206,17 @@ namespace UnityEngine.EventSystems
             if (!eventSystem.isFocused && ShouldIgnoreEventsOnNoFocus())
                 return;
 
+            // 如果之前有选中的gameObject并且实现IUpdateSelectedHandler接口，那么会调用实现的OnUpdateSelected方法
             bool usedEvent = SendUpdateEventToSelectedObject();
 
             if (eventSystem.sendNavigationEvents)
             {
+                // 如果之前有选中的gameObject并且实现IMoveHandler接口，那么会调用实现的OnMove方法
                 if (!usedEvent)
                     usedEvent |= SendMoveEventToSelectedObject();
 
+                // 按下了"Submit"按键，如果之前有选中的gameObject并且实现ISubmitHandler接口，那么会调用实现的OnSubmit方法
+                // 按下了"Cancel"按键，如果之前有选中的gameObject并且实现ICancelHandler接口，那么会调用实现的OnCancel方法
                 if (!usedEvent)
                     SendSubmitEventToSelectedObject();
             }

@@ -265,6 +265,8 @@ namespace UnityEngine.EventSystems
                 return;
             TickModules();
 
+            // 正常情况不用管，m_SystemInputModules在StandaloneInputModule OnEnable时会调用EventSystem.UpdateModules方法，会对m_SystemInputModules进行
+            // 初始化，获取挂载的所有InputModules。
             bool changedModule = false;
             for (var i = 0; i < m_SystemInputModules.Count; i++)
             {
