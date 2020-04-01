@@ -1,0 +1,19 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\UnityEngine.UI",
+    "\\UnityEngine.UI\\EventSystem",
+    "\\UnityEngine.UI\\EventSystem\\InputModules",
+    "\\UnityEngine.UI\\EventSystem\\Raycasters",
+    "\\UnityEngine.UI\\obj",
+    "\\UnityEngine.UI\\obj\\Debug",
+    "\\UnityEngine.UI\\obj\\Release",
+    "\\UnityEngine.UI\\obj\\Test",
+    "\\UnityEngine.UI\\Properties",
+    "\\UnityEngine.UI\\UI",
+    "\\UnityEngine.UI\\UI\\Animation",
+    "\\UnityEngine.UI\\UI\\Core"
+  ],
+  "SelectedNode": "\\UnityEngine.UI\\EventSystem\\EventSystem.cs",
+  "PreviewInSolutionExplorer": false
+}
