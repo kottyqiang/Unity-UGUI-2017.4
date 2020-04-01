@@ -217,7 +217,7 @@ namespace UnityEngine.EventSystems
                     SendSubmitEventToSelectedObject();
             }
 
-            // 处理手机上的touch事件，非手机会进行mouse事件的处理
+            // 处理touch事件，没有touch事件的话会处理Mouse事件
             // touch needs to take precedence because of the mouse emulation layer
             if (!ProcessTouchEvents() && input.mousePresent)
                 ProcessMouseEvent();

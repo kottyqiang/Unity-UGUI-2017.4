@@ -39,7 +39,7 @@ namespace UnityEngine.EventSystems
             PointerEventData pointerData;
             var created = GetPointerData(input.fingerId, out pointerData, true);
 
-            // 封装的pointerData先进行还原，然后进行
+            // 封装的pointerData先进行还原，然后进行各种数据的设置
             pointerData.Reset();
 
             pressed = created || (input.phase == TouchPhase.Began);
@@ -48,13 +48,14 @@ namespace UnityEngine.EventSystems
             if (created)
                 pointerData.position = input.position;
 
+            // 和上一帧相比移动的距离
             if (pressed)
                 pointerData.delta = Vector2.zero;
             else
                 pointerData.delta = input.position - pointerData.position;
 
             pointerData.position = input.position;
-
+            // 判定为左键点击
             pointerData.button = PointerEventData.InputButton.Left;
 
             if (input.phase == TouchPhase.Canceled)
@@ -63,6 +64,7 @@ namespace UnityEngine.EventSystems
             }
             else
             {
+                // 射线检测，和image text中的raycastTarget选项息息相关，注意消耗
                 eventSystem.RaycastAll(pointerData, m_RaycastResultCache);
 
                 var raycast = FindFirstRaycast(m_RaycastResultCache);

@@ -195,6 +195,9 @@ namespace UnityEngine.EventSystems
         public void RaycastAll(PointerEventData eventData, List<RaycastResult> raycastResults)
         {
             raycastResults.Clear();
+            // 获取所有的Raycasters,UI中主要是GraphicRaycaster。GraphicRaycaster会在OnEnable中调用RaycasterManager.AddRaycaster进行缓存
+            // OnDisable中调用RaycasterManager.RemoveRaycasters进行移除
+            // 因为是获取所有的raycast，因此如果分离出太多的canvas并且都能进行射线检测的话，那么也需要考虑到性能的消耗。
             var modules = RaycasterManager.GetRaycasters();
             for (int i = 0; i < modules.Count; ++i)
             {
@@ -255,6 +258,7 @@ namespace UnityEngine.EventSystems
             m_HasFocus = hasFocus;
         }
 
+        // 每个渲染帧刷一次
         protected virtual void Update()
         {
             if (current != this)
@@ -292,6 +296,7 @@ namespace UnityEngine.EventSystems
             }
 
             // 调用输入模块处理方法
+            // 一般是standaloneInputModule,touchInputModule已被standaloneInputModule取代
             if (!changedModule && m_CurrentInputModule != null)
                 m_CurrentInputModule.Process();
         }
