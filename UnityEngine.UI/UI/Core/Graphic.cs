@@ -544,19 +544,22 @@ namespace UnityEngine.UI
                 for (var i = 0; i < components.Count; i++)
                 {
                     var canvas = components[i] as Canvas;
+                    // 如果挂载了canvas组件，并且overrideSorting为true,这个一般是嵌套的canvas
                     if (canvas != null && canvas.overrideSorting)
                         continueTraversal = false;
 
+                    // 实现ICanvasRaycastFilter接口的组件，CanvasGroup也实现了此接口
                     var filter = components[i] as ICanvasRaycastFilter;
 
                     if (filter == null)
                         continue;
-
+                    
                     var raycastValid = true;
 
                     var group = components[i] as CanvasGroup;
                     if (group != null)
                     {
+                        // 勾选了ignoreParentGroups，那么只有这层的canvasGroup会进行检测
                         if (ignoreParentGroups == false && group.ignoreParentGroups)
                         {
                             ignoreParentGroups = true;
@@ -567,6 +570,7 @@ namespace UnityEngine.UI
                     }
                     else
                     {
+                        // 调用IsRaycastLocationValid方法
                         raycastValid = filter.IsRaycastLocationValid(sp, eventCamera);
                     }
 

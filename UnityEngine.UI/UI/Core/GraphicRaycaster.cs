@@ -79,6 +79,7 @@ namespace UnityEngine.UI
             if (canvas == null)
                 return;
 
+            // 获取关联canvas上所有的graphic(image text rawImage这些)
             var canvasGraphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
             if (canvasGraphics == null || canvasGraphics.Count == 0)
                 return;
@@ -141,6 +142,7 @@ namespace UnityEngine.UI
             if (currentEventCamera != null)
                 ray = currentEventCamera.ScreenPointToRay(eventPosition);
 
+            // 检测遮挡物，3D和2D物体，如果在UI前面就会发生遮挡。Blocking Objects和Blocking Mask可以在Graphic Raycaster组件上设置
             if (canvas.renderMode != RenderMode.ScreenSpaceOverlay && blockingObjects != BlockingObjects.None)
             {
                 float distanceToClipPlane = 100.0f;
@@ -175,6 +177,7 @@ namespace UnityEngine.UI
             }
 
             m_RaycastResults.Clear();
+            // 关键方法，射线检测
             Raycast(canvas, currentEventCamera, eventPosition, canvasGraphics, m_RaycastResults);
 
             int totalCount = m_RaycastResults.Count;
@@ -262,12 +265,14 @@ namespace UnityEngine.UI
                 Graphic graphic = foundGraphics[i];
 
                 // -1 means it hasn't been processed by the canvas, which means it isn't actually drawn
+                // 没有勾选raycastTarget的不参与检测，一般不需要接收UI事件的graphic最好都不要勾选
                 if (graphic.depth == -1 || !graphic.raycastTarget || graphic.canvasRenderer.cull)
                     continue;
-
+                // 这里检测的方式是使用屏幕坐标和rectTransform rect进行匹配，就是基于2D平面的矩形和点的包含关系
                 if (!RectTransformUtility.RectangleContainsScreenPoint(graphic.rectTransform, pointerPosition, eventCamera))
                     continue;
-
+                // farClipPlane为camera远处平面，检测深度值。
+                // 先转成屏幕坐标再进行比较
                 if (eventCamera != null && eventCamera.WorldToScreenPoint(graphic.rectTransform.position).z > eventCamera.farClipPlane)
                     continue;
 
