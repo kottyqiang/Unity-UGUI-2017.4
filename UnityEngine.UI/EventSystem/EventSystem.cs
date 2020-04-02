@@ -205,6 +205,7 @@ namespace UnityEngine.EventSystems
                 if (module == null || !module.IsActive())
                     continue;
 
+                // 这里的module一般都是GraphicRaycaster
                 module.Raycast(eventData, raycastResults);
             }
 

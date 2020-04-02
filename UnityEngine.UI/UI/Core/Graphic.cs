@@ -557,6 +557,7 @@ namespace UnityEngine.UI
                     var raycastValid = true;
 
                     var group = components[i] as CanvasGroup;
+                    // 这里有坑，检测完子节点再检测父节点，父节点IsRaycastLocationValid完全有可能返回false
                     if (group != null)
                     {
                         // 勾选了ignoreParentGroups，那么只有这层的canvasGroup会进行检测

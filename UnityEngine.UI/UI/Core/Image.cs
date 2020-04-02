@@ -1138,6 +1138,7 @@ namespace UnityEngine.UI
 
         public virtual bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
         {
+            // 一般没有设置alphaHitTestMinimumThreshold的值，所以一般都返回true了，没什么痛感
             if (alphaHitTestMinimumThreshold <= 0)
                 return true;
 
@@ -1147,19 +1148,27 @@ namespace UnityEngine.UI
             if (activeSprite == null)
                 return true;
 
+            // 假如图片导入的时候如果勾选Tight会有问题，勾选Tight会剔除掉图片周边的透明像素，这一点可以从textRect大小看出
+            // 可以选择勾选FullRect，这个选项会保留图片周边的透明像素
             Vector2 local;
+            // 将屏幕坐标转为矩形内的坐标位置
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, eventCamera, out local))
                 return false;
-
+            // 像素精度，canvas没有勾选pixelPerfect的情况下无效
             Rect rect = GetPixelAdjustedRect();
 
+            // 排除设置的pivot干扰，以矩形左下角为坐标原点计算变量local的坐标位置
             // Convert to have lower left corner as reference point.
             local.x += rectTransform.pivot.x * rect.width;
             local.y += rectTransform.pivot.y * rect.height;
 
+            // 映射坐标
             local = MapCoordinate(local, rect);
 
             // Normalize local coordinates.
+            // 问题出在这里，Rect和textureRect可能会不一样大，texture.width取得是图片宽度，打到图集中就是图集宽度
+            // 只要周边有透明像素，且meshType这是为Tight的话，就肯定会有问题，只有设置为FullRect才不会有问题，但这样就浪费内存空间了
+            // 所以出现这种情况时还是让美术改图更好些
             Rect spriteRect = activeSprite.textureRect;
             Vector2 normalized = new Vector2(local.x / spriteRect.width, local.y / spriteRect.height);
 
@@ -1169,6 +1178,7 @@ namespace UnityEngine.UI
 
             try
             {
+                // alphaHitTestMinimumThreshold alpha值过滤的阈值，给这个变量赋值之前需要先勾选sprite资源的read/write enabled选项
                 return activeSprite.texture.GetPixelBilinear(x, y).a >= alphaHitTestMinimumThreshold;
             }
             catch (UnityException e)
@@ -1181,6 +1191,7 @@ namespace UnityEngine.UI
         private Vector2 MapCoordinate(Vector2 local, Rect rect)
         {
             Rect spriteRect = activeSprite.rect;
+            // 这里用sprite的大小除以rectTransform的大小，注意rect和textureRect的区别
             if (type == Type.Simple || type == Type.Filled)
                 return new Vector2(local.x * spriteRect.width / rect.width, local.y * spriteRect.height / rect.height);
 
