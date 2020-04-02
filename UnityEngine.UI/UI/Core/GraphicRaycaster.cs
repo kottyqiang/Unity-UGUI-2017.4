@@ -186,6 +186,7 @@ namespace UnityEngine.UI
                 var go = m_RaycastResults[index].gameObject;
                 bool appendGraphic = true;
 
+                // GraphicRaycaster是否勾选ignoreReversedGraphics,和camera forward方向是否相反作为是否为reversed的依据
                 if (ignoreReversedGraphics)
                 {
                     if (currentEventCamera == null)
@@ -220,7 +221,7 @@ namespace UnityEngine.UI
                         if (distance < 0)
                             continue;
                     }
-
+                    // 前面假如有遮挡，在这里就会进行一次过滤
                     if (distance >= hitDistance)
                         continue;
 
@@ -281,6 +282,7 @@ namespace UnityEngine.UI
                     s_SortedGraphics.Add(graphic);
                 }
             }
+
 
             s_SortedGraphics.Sort((g1, g2) => g2.depth.CompareTo(g1.depth));
             //      StringBuilder cast = new StringBuilder();

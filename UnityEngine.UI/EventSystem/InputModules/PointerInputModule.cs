@@ -65,8 +65,9 @@ namespace UnityEngine.EventSystems
             else
             {
                 // 射线检测，和image text中的raycastTarget选项息息相关，注意消耗
+                // 这个方法可能会获得一大堆检测结果，并且经过排序
                 eventSystem.RaycastAll(pointerData, m_RaycastResultCache);
-
+                // 取第一个
                 var raycast = FindFirstRaycast(m_RaycastResultCache);
                 pointerData.pointerCurrentRaycast = raycast;
                 m_RaycastResultCache.Clear();

@@ -147,10 +147,12 @@ namespace UnityEngine.EventSystems
 
         private static int RaycastComparer(RaycastResult lhs, RaycastResult rhs)
         {
+            // 一般是不同的canvas
             if (lhs.module != rhs.module)
             {
                 var lhsEventCamera = lhs.module.eventCamera;
                 var rhsEventCamera = rhs.module.eventCamera;
+                // camera depth最优先
                 if (lhsEventCamera != null && rhsEventCamera != null && lhsEventCamera.depth != rhsEventCamera.depth)
                 {
                     // need to reverse the standard compareTo
@@ -161,14 +163,15 @@ namespace UnityEngine.EventSystems
 
                     return -1;
                 }
-
+                // camera renderMode为screen的时候才会用到它，为canvas的sortingOrder;其他renderMode为固定值
                 if (lhs.module.sortOrderPriority != rhs.module.sortOrderPriority)
                     return rhs.module.sortOrderPriority.CompareTo(lhs.module.sortOrderPriority);
-
+                // camera renderMode为screen的时候才会用到它，为canvas.rootCanvas.renderOrder;其他renderMode为固定值
                 if (lhs.module.renderOrderPriority != rhs.module.renderOrderPriority)
                     return rhs.module.renderOrderPriority.CompareTo(lhs.module.renderOrderPriority);
             }
 
+            // 不同的canvas比较sortingLayer
             if (lhs.sortingLayer != rhs.sortingLayer)
             {
                 // Uses the layer value to properly compare the relative order of the layers.
@@ -177,13 +180,13 @@ namespace UnityEngine.EventSystems
                 return rid.CompareTo(lid);
             }
 
-
+            // 不同的canvas比较sortingOrder
             if (lhs.sortingOrder != rhs.sortingOrder)
                 return rhs.sortingOrder.CompareTo(lhs.sortingOrder);
-
+            // 比较graphic的depth
             if (lhs.depth != rhs.depth)
                 return rhs.depth.CompareTo(lhs.depth);
-
+            // 比较graphic的distance
             if (lhs.distance != rhs.distance)
                 return lhs.distance.CompareTo(rhs.distance);
 

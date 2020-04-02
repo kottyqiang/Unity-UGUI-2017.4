@@ -240,7 +240,7 @@ namespace UnityEngine.EventSystems
                 bool pressed;
                 // 获取TouchPointer事件数据
                 var pointer = GetTouchPointerEventData(touch, out pressed, out released);
-
+                // 触发各种事件
                 ProcessTouchPress(pointer, pressed, released);
 
                 if (!released)

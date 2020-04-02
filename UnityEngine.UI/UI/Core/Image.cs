@@ -1139,6 +1139,7 @@ namespace UnityEngine.UI
         public virtual bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
         {
             // 一般没有设置alphaHitTestMinimumThreshold的值，所以一般都返回true了，没什么痛感
+            // alphaHitTestMinimumThreshold可以用来做不规则图形点击，用UIPolygon也能做到不规则点击
             if (alphaHitTestMinimumThreshold <= 0)
                 return true;
 
