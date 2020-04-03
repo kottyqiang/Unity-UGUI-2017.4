@@ -271,6 +271,7 @@ namespace UnityEngine.EventSystems
                 // 设置选中的GameObject
                 DeselectIfSelectionChanged(currentOverGo, pointerEvent);
 
+                // 上次指向的gamObject和这次的不同就会执行ExitAndEnter
                 if (pointerEvent.pointerEnter != currentOverGo)
                 {
                     // send a pointer enter to the touched element if it isn't the one to select...
@@ -316,7 +317,7 @@ namespace UnityEngine.EventSystems
 
                 if (pointerEvent.pointerDrag != null)
                     ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.initializePotentialDrag);
-
+                
                 m_InputPointerEvent = pointerEvent;
             }
 

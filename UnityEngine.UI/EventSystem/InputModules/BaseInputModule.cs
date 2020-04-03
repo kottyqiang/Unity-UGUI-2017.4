@@ -136,7 +136,7 @@ namespace UnityEngine.EventSystems
                     ExecuteEvents.Execute(currentPointerData.hovered[i], currentPointerData, ExecuteEvents.pointerExitHandler);
 
                 currentPointerData.hovered.Clear();
-
+                
                 if (newEnterTarget == null)
                 {
                     currentPointerData.pointerEnter = newEnterTarget;
@@ -156,9 +156,10 @@ namespace UnityEngine.EventSystems
                 // send exit handler call to all elements in the chain
                 // until we reach the new target, or null!
                 Transform t = currentPointerData.pointerEnter.transform;
-
+                
                 while (t != null)
                 {
+ 
                     // if we reach the common root break out!
                     if (commonRoot != null && commonRoot.transform == t)
                         break;
