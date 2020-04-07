@@ -89,6 +89,7 @@ namespace UnityEngine.UI
             if (!IsActive())
                 return;
 
+            // Layout Rebuild
             LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
 
             if (m_OnDirtyLayoutCallback != null)
@@ -119,6 +120,7 @@ namespace UnityEngine.UI
                 m_OnDirtyMaterialCallback();
         }
 
+        // 自身尺寸发生变化的时候回调
         protected override void OnRectTransformDimensionsChange()
         {
             if (gameObject.activeInHierarchy)

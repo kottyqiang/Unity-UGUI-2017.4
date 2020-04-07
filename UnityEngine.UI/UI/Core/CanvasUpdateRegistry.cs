@@ -38,6 +38,7 @@ namespace UnityEngine.UI
 
         protected CanvasUpdateRegistry()
         {
+            // 每个渲染帧调用。在LateUpdate之后
             Canvas.willRenderCanvases += PerformUpdate;
         }
 

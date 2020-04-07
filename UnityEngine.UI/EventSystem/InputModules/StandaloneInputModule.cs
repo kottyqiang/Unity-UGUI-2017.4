@@ -282,9 +282,11 @@ namespace UnityEngine.EventSystems
                 // search for the control that will receive the press
                 // if we can't find a press handler set the press
                 // handler to be what would receive a click.
+                // 下往上找到第一个实现IPointerDownHandler接口(OnPointerDown)的gameObject,比如说InputField下面挂了一个Image,那么点击Image,InputField也会接收事件
                 var newPressed = ExecuteEvents.ExecuteHierarchy(currentOverGo, pointerEvent, ExecuteEvents.pointerDownHandler);
 
                 // didnt find a press handler... search for a click handler
+                // 从下往上找到第一个实现IPointerClickHandler接口(OnPointerClick)的gameObject，注意这里不会接收事件调用方法
                 if (newPressed == null)
                     newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
 
@@ -295,6 +297,7 @@ namespace UnityEngine.EventSystems
                 if (newPressed == pointerEvent.lastPress)
                 {
                     var diffTime = time - pointerEvent.clickTime;
+                    // 可以用来做双击
                     if (diffTime < 0.3f)
                         ++pointerEvent.clickCount;
                     else
@@ -333,6 +336,7 @@ namespace UnityEngine.EventSystems
                 var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
 
                 // PointerClick and Drop events
+                // 按下去的释放的为同一个的时候（注意pointerUpHandler的获取方式，也是自下往上找），触发OnPointerClick
                 if (pointerEvent.pointerPress == pointerUpHandler && pointerEvent.eligibleForClick)
                 {
                     ExecuteEvents.Execute(pointerEvent.pointerPress, pointerEvent, ExecuteEvents.pointerClickHandler);

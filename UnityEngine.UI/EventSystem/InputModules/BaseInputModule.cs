@@ -132,6 +132,7 @@ namespace UnityEngine.EventSystems
             // then exit
             if (newEnterTarget == null || currentPointerData.pointerEnter == null)
             {
+                // 执行OnPointerExit，没毛病
                 for (var i = 0; i < currentPointerData.hovered.Count; ++i)
                     ExecuteEvents.Execute(currentPointerData.hovered[i], currentPointerData, ExecuteEvents.pointerExitHandler);
 

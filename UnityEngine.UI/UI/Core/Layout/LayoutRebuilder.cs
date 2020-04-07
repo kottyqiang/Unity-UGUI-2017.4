@@ -148,6 +148,7 @@ namespace UnityEngine.UI
             while (validLayoutGroup && !(parent == null || parent.gameObject == null))
             {
                 validLayoutGroup = false;
+                // 实现ILayoutGroup接口的，例如ScrollRect,还有三种ILayoutGroup布局
                 parent.GetComponents(typeof(ILayoutGroup), comps);
 
                 for (int i = 0; i < comps.Count; ++i)
@@ -166,12 +167,15 @@ namespace UnityEngine.UI
 
             // We know the layout root is valid if it's not the same as the rect,
             // since we checked that above. But if they're the same we still need to check.
+            // 没有挂载自适应组件(AspectRatioFitter、ContentSizeFitter)或者三种布局组件，并且父物体没有挂载三种布局组件就不会产生layout rebuild
             if (layoutRoot == rect && !ValidController(layoutRoot, comps))
             {
+                    
                 ListPool<Component>.Release(comps);
                 return;
             }
 
+            // 注册rebuild
             MarkLayoutRootForRebuild(layoutRoot);
             ListPool<Component>.Release(comps);
         }
